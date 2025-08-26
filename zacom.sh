@@ -36,7 +36,7 @@ if (( RANDOM % 100 < 30 )); then
 
   if [ $num_commits -gt 0 ]; then
     git push -u origin main
-    echo "Successfully committed $num_commits times today."
+    echo "Successfully committed $num_commits times today. You need to create pull request in github for creating an activity"
   else
     echo "No commits were made today."
   fi
