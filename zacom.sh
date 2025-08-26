@@ -19,6 +19,14 @@ if (( RANDOM % 100 < 30 )); then
   
   echo "Committing $num_commits times today."
   current_date=$(date +%Y-%m-%d)
+  current_time=$(date +%H%M%S)
+  branch_name="feature/zacom-$current_date-$current_time"
+
+  # Ensure we're up to date on main, then create and switch to a feature branch
+  git fetch origin
+  git checkout main
+  git pull --ff-only
+  git checkout -b "$branch_name"
 
   for (( i=1; i<=num_commits; i++ )); do
     # Format seconds with a leading zero for consistency
@@ -35,8 +43,10 @@ if (( RANDOM % 100 < 30 )); then
   done
 
   if [ $num_commits -gt 0 ]; then
-    git push -u origin main
-    echo "Successfully committed $num_commits times today. You need to create pull request in github for creating an activity"
+    # Push the feature branch, merge it back to main, and push main
+    git push -u origin "$branch_name"
+    git checkout main
+    echo "Successfully committed $num_commits times today on branch $branch_name and you should go to github to create a pull request."
   else
     echo "No commits were made today."
   fi
